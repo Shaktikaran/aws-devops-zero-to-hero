@@ -9,13 +9,15 @@ env:
 phases:
   install:
     commands:
-      - echo "Installing dependencies for Python build..."
-      - yum install -y gcc gcc-c++ make zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel openssl-devel libffi-devel xz-devel curl git
-      - echo "Cleaning up previous pyenv installation if exists..."
+      - echo "Installing required dependencies for Python build..."
+      - yum update -y
+      - yum groupinstall -y "Development Tools"
+      - yum install -y gcc gcc-c++ make zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel openssl-devel libffi-devel xz-devel curl git tar wget
+      - echo "Cleaning up previous pyenv installation..."
       - rm -rf /root/.pyenv
       - echo "Installing pyenv..."
       - curl https://pyenv.run | bash
-      - export PATH="$HOME/.pyenv/bin:$PATH"
+      - export PATH="/root/.pyenv/bin:$PATH"
       - eval "$(pyenv init --path)"
       - eval "$(pyenv virtualenv-init -)"
       - echo "Installing Python 3.11..."
@@ -33,7 +35,7 @@ phases:
       - echo "Building Docker image..."
       - echo "$DOCKER_REGISTRY_PASSWORD" | docker login -u "$DOCKER_REGISTRY_USERNAME" --password-stdin "$DOCKER_REGISTRY_URL"
       - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/simple-python-flask-app:latest" .
-      - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/simple-python-flask-app:latest"
+      - docker push "docker.io/shaktikaran/simple-python-flask-app:latest"
   post_build:
     commands:
       - echo "Build completed successfully!"
