@@ -11,6 +11,8 @@ phases:
     commands:
       - echo "Installing dependencies for Python build..."
       - yum install -y gcc gcc-c++ make zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel openssl-devel libffi-devel xz-devel curl git
+      - echo "Cleaning up previous pyenv installation if exists..."
+      - rm -rf /root/.pyenv
       - echo "Installing pyenv..."
       - curl https://pyenv.run | bash
       - export PATH="$HOME/.pyenv/bin:$PATH"
