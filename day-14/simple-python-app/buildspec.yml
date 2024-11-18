@@ -10,14 +10,20 @@ phases:
   install:
     commands:
       - echo "Installing dependencies for Python build..."
-      - yum install -y gcc gcc-c++ make zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel openssl-devel libffi-devel
+      - yum install -y gcc gcc-c++ make zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel openssl-devel libffi-devel xz-devel curl git
+      - echo "Installing pyenv..."
+      - curl https://pyenv.run | bash
+      - export PATH="$HOME/.pyenv/bin:$PATH"
+      - eval "$(pyenv init --path)"
+      - eval "$(pyenv virtualenv-init -)"
       - echo "Installing Python 3.11..."
-      - pyenv install 3.11 && pyenv global 3.11
+      - pyenv install 3.11
+      - pyenv global 3.11
       - python --version
   pre_build:
     commands:
       - echo "Installing dependencies..."
-      - pip install -r day-14/simple-python-app/requirements.txt
+      - pip install --no-cache-dir -r day-14/simple-python-app/requirements.txt
   build:
     commands:
       - echo "Running tests..."
